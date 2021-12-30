@@ -53,4 +53,19 @@ describe('Game', () => {
     assert.ok(gameAccount.timestamp);
   });
 
+  it('Can create a wheel of fortune game and be found in the blockchain', async () => {
+    // Generate another user and airdrop them some SOL.
+    const game = anchor.web3.Keypair.generate();
+    await program.rpc.startGame({
+      accounts: {
+        game: game.publicKey,
+        author: program.provider.wallet.publicKey,
+        systemProgram: anchor.web3.SystemProgram.programId
+      },
+      signers: [game],
+    });
+
+    assert.ok(await (await program.account.wheelOfFortune.all()).find(v => v.publicKey.toBase58() === game.publicKey.toBase58()));
+  });
+
 });

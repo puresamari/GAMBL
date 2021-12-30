@@ -5,7 +5,10 @@
 ### Local
 
 - `$ solana config set --url localhost`
-- Run local ledger `$ solana-test-validator` or `$ solana-test-validator --reset for a new ledger`
+- Run local ledger 
+  - `$ anchor localnet`
+  - `$ solana-test-validator` if anchor not installed
+  - `$ solana-test-validator --reset` if anchor not available and you need to reset the ledger
 
 ## Compile
 - `$ anchor build` or `$ npm run build`

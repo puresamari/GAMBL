@@ -4,13 +4,13 @@ module.exports = {
     extend: {
       borderColor: {
         DEFAULT: "#000"
+      },
+      colors: {
+        black: "#000",
+        white: "#fff",
+        gray: "#999",
+        pink: "#FF008A"
       }
-    },
-    colors: {
-      black: "#000",
-      white: "#fff",
-      gray: "#999",
-      pink: "#FF008A"
     }
   },
   plugins: []

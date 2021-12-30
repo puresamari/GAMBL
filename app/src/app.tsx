@@ -1,4 +1,4 @@
-import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
+import { web3 } from "@project-serum/anchor";
 import {
   ConnectionProvider,
   WalletProvider
@@ -8,21 +8,21 @@ import {
   getPhantomWallet,
   getSlopeWallet,
   getSolflareWallet,
-  getSolletExtensionWallet,
-  getSolletWallet,
   getTorusWallet
 } from "@solana/wallet-adapter-wallets";
-import { clusterApiUrl } from "@solana/web3.js";
+import { clusterApiUrl, Connection, PublicKey } from "@solana/web3.js";
 import React, { FC, useMemo } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 import { Layout } from "./layout";
+import { History } from "./pages/history";
+import { Landing } from "./pages/landing";
+import { useNetwork } from "./utils/network";
+import { useEndpoint } from "./utils/endpoint";
 
 export const App: FC = () => {
-  const network = WalletAdapterNetwork.Devnet;
-
-  // You can also provide a custom RPC endpoint
-  const endpoint = useMemo(() => clusterApiUrl(network), [network]);
+  const [network] = useNetwork();
+  const endpoint = useEndpoint();
 
   // @solana/wallet-adapter-wallets includes all the adapters but supports tree shaking and lazy loading --
   // Only the wallets you configure here will be compiled into your application, and only the dependencies
@@ -33,9 +33,9 @@ export const App: FC = () => {
       getSlopeWallet(),
       getSolflareWallet(),
       getTorusWallet(),
-      getLedgerWallet(),
-      getSolletWallet({ network }),
-      getSolletExtensionWallet({ network })
+      getLedgerWallet()
+      // getSolletWallet({ network }),
+      // getSolletExtensionWallet({ network })
     ],
     [network]
   );
@@ -47,7 +47,8 @@ export const App: FC = () => {
           <Layout>
             <Routes>
               <Route path="/how-it-works" element={<HowItWorks />} />
-              <Route path="/" element={<Home />} />
+              <Route path="/history" element={<History />} />
+              <Route path="/" element={<Landing />} />
             </Routes>
           </Layout>
         </Router>
@@ -55,10 +56,6 @@ export const App: FC = () => {
     </ConnectionProvider>
   );
 };
-
-function Home() {
-  return <h2>Home</h2>;
-}
 
 function HowItWorks() {
   return <h2>IDK LOL…</h2>;

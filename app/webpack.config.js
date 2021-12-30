@@ -82,6 +82,15 @@ module.exports = {
     }),
     new HTMLWebpackPlugin({
       template: "src/index.html"
+    }),
+    new webpack.DefinePlugin({
+      "process.env": JSON.stringify({}),
+      "process.env.NODE_ENV": JSON.stringify(
+        devMode ? "development" : "production"
+      ),
+      "process.env.NODE_DEBUG": JSON.stringify(
+        devMode ? "development" : "production"
+      )
     })
   ].concat(
     devMode
