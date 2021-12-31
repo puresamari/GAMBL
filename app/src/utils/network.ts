@@ -1,22 +1,24 @@
+import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import { useEffect } from 'react';
 import { useState } from 'react';
-import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
-import { BehaviorSubject, distinctUntilChanged, map, Observable } from 'rxjs';
-import { useObservable } from "rxjs-hooks";
+import { BehaviorSubject, distinctUntilChanged } from 'rxjs';
 
 export type Network = WalletAdapterNetwork | 'local';
 
-const NetworkBehav = new BehaviorSubject<Network>('local');
+export const NETWORK_TITLES: { [network in Network]: { title: string, implemented: boolean } } = {
+  "mainnet-beta": { title: 'Mainnet (Beta)', implemented: false },
+  devnet: { title: 'Devnet', implemented: false },
+  testnet: { title: 'Testnet', implemented: true },
+  local: { title: 'Local ledger', implemented: true }
+};
+
+const NetworkBehav = new BehaviorSubject<Network>(
+  process.env.NODE_ENV === 'development' ? 'local' :
+    (Object.keys(NETWORK_TITLES) as Network[]).find(v => NETWORK_TITLES[v as Network]!.implemented) || WalletAdapterNetwork.Devnet);
+
 export const $network = NetworkBehav.pipe(
   distinctUntilChanged((a, b) => a === b)
 );
-
-export const NETWORK_TITLES: { [network in Network]: string } = {
-  "mainnet-beta": 'Mainnet (Beta)',
-  devnet: 'Devnet',
-  testnet: 'Testnet',
-  local: 'Local ledger'
-};
 
 export const useNetwork = (): [Network, (network: Network) => void] => {
   const [network, setNetwork] = useState<Network>(NetworkBehav.getValue());
