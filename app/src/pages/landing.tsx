@@ -8,8 +8,10 @@ import { useWorkspace } from "../utils/workspace";
 export const Landing: FC = () => {
   const wallet = useWallet();
 
-  if (!wallet) {
-    return <p>connect your wallet dude!</p>;
+  if (!wallet?.publicKey) {
+    return (
+      <p className="flex flex-row justify-end">connect your wallet dude!☝️</p>
+    );
   }
 
   const [game, setGame] = useState<IGamePreviewData | undefined>();

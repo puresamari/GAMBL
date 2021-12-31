@@ -56,13 +56,20 @@ export const Navigation = () => {
           <ul className="whitespace-nowrap">
             {Object.keys(NETWORK_TITLES).map((v) => (
               <li
-                className={`border-b flex flex-row justify-start cursor-pointer hover:border-pink items-center ${
+                className={`${
+                  !NETWORK_TITLES[v as Network]?.implemented
+                    ? "bg-gray opacity-50 px-2 pointer-events-none"
+                    : "cursor-pointer hover:border-pink "
+                } border-b flex flex-row justify-start items-center ${
                   network !== v ? "border-dashed" : "border-pink"
                 }`}
                 key={v}
-                onClick={() => setNetwork(v as Network)}
+                onClick={() =>
+                  NETWORK_TITLES[v as Network]?.implemented &&
+                  setNetwork(v as Network)
+                }
               >
-                {NETWORK_TITLES[v as Network]}
+                {NETWORK_TITLES[v as Network]?.title}
                 {network === v && <div className="bg-pink w-2 h-2 ml-2" />}
               </li>
             ))}

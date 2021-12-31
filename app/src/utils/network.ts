@@ -7,14 +7,14 @@ export type Network = WalletAdapterNetwork | 'local';
 
 export const NETWORK_TITLES: { [network in Network]: { title: string, implemented: boolean } } = {
   "mainnet-beta": { title: 'Mainnet (Beta)', implemented: false },
-  devnet: { title: 'Devnet', implemented: false },
-  testnet: { title: 'Testnet', implemented: true },
+  devnet: { title: 'Devnet', implemented: true },
+  testnet: { title: 'Testnet', implemented: false },
   local: { title: 'Local ledger', implemented: true }
 };
 
 const NetworkBehav = new BehaviorSubject<Network>(
   process.env.NODE_ENV === 'development' ? 'local' :
-    (Object.keys(NETWORK_TITLES) as Network[]).find(v => NETWORK_TITLES[v as Network]!.implemented) || WalletAdapterNetwork.Devnet);
+    (Object.keys(NETWORK_TITLES) as Network[]).find(v => NETWORK_TITLES[v as Network]?.implemented) || WalletAdapterNetwork.Devnet);
 
 export const $network = NetworkBehav.pipe(
   distinctUntilChanged((a, b) => a === b)
