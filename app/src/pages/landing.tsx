@@ -21,19 +21,19 @@ export const Landing: FC = () => {
 
   useEffect(() => setGame(activeGame || undefined), [activeGame]);
 
-  if (!wallet?.publicKey) {
-    return (
-      <p className="flex flex-row justify-end">connect your wallet dude!☝️</p>
-    );
-  }
-
   return (
     <>
+      {!wallet?.publicKey && (
+        <p className="flex flex-row justify-end mb-4 text-4xl">
+          connect your wallet!
+          <span className="animate-bounce ml-8">☝️</span>
+        </p>
+      )}
       {transactionError && (
         <p className="text-red-500">{transactionError + ""}</p>
       )}
       {game && <GamePreview {...game?.account} publicKey={game?.publicKey} />}
-      {workspace && (
+      {wallet?.publicKey && workspace && (
         <button
           onClick={async () => {
             console.log(wallet);

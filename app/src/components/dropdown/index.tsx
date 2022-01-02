@@ -28,7 +28,7 @@ export const Dropdown: FC<{
     <div className={`group relative ${className}`}>
       {children}
       <div
-        className={`bg-white border p-2 hidden group-hover:flex absolute transform top-full ${CLS.horizontal[horizontal]} ${contentWrapperClassName}`}
+        className={`bg-black border p-2 hidden group-hover:flex absolute transform top-full ${CLS.horizontal[horizontal]} ${contentWrapperClassName}`}
       >
         {content}
       </div>

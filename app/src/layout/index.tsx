@@ -5,9 +5,9 @@ export const Layout: FC<{ children: ReactNode }> = ({ children }) => (
   <div className="relative flex flex-col justify-start basis-full flex-grow pt-16">
     <Navigation />
     <div
-      className="h-8 w-full bg-repeat border-b"
+      className="h-8 w-full bg-repeat border-b bg-fixed"
       style={{
-        backgroundSize: `${Math.round(64 / 2)}px`,
+        backgroundSize: `64px`,
         backgroundImage: `url(${require("./assets/DIAG_LINES.png")})`
       }}
     />

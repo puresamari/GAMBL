@@ -6,8 +6,14 @@ import {
   WalletModalProvider,
   WalletMultiButton
 } from "@solana/wallet-adapter-react-ui";
-import React, { useMemo } from "react";
-import { Link, useLocation, useNavigate, useRoutes } from "react-router-dom";
+import React, { FC, ReactNode, useMemo } from "react";
+import {
+  Link,
+  NavLink,
+  useLocation,
+  useNavigate,
+  useRoutes
+} from "react-router-dom";
 import { Dropdown } from "../dropdown";
 import {
   useAnchorWallet,
@@ -17,6 +23,25 @@ import {
 import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
 import { Network, NETWORK_TITLES, useNetwork } from "../../utils/network";
 
+const HeaderLinnk: FC<{
+  url: string;
+  children: ReactNode;
+  disabled?: boolean;
+}> = ({ url, children, disabled }) => (
+  <NavLink
+    className={({ isActive }) =>
+      `${
+        isActive ? "text-pink italic underline" : "hover:text-black"
+      } hover:bg-green border-x flex items-center px-4 justify-center ${
+        !disabled ? "" : "opacity-50 pointer-events-none"
+      }`
+    }
+    to={url}
+  >
+    {children}
+  </NavLink>
+);
+
 export const Navigation = () => {
   const anchorWallet = useAnchorWallet();
   const wallet = useWallet();
@@ -25,41 +50,28 @@ export const Navigation = () => {
   const [network, setNetwork] = useNetwork();
 
   return (
-    <nav className="flex flex-row w-full fixed top-0 left-0 h-16 border-b">
+    <nav className="flex flex-row w-full fixed top-0 left-0 h-16 border-b bg-black">
       <Link
-        className="hover:opacity-50 flex items-center px-4 justify-center"
+        className="hover:bg-green flex items-center px-1 justify-center"
         to="/"
       >
-        <img src={require("./assets/GAMBL.png")} className="w-8" />
+        <img src={require("./assets/GAMBL.png")} className="w-14" />
       </Link>
-      <Link
-        className="hover:opacity-50 border-l flex items-center px-4 justify-center"
-        to="/how-it-works"
-      >
-        HOW?
-      </Link>
-      <Link
-        className="hover:opacity-50 border-l flex items-center px-4 justify-center"
-        to="/history"
-      >
-        PAST GAMES
-      </Link>
-      <Link
-        className="hover:opacity-50 border-x flex opacity-50 pointer-events-none items-center px-4 justify-center"
-        to="/"
-      >
+      <HeaderLinnk url="/how-it-works">HOW?</HeaderLinnk>
+      <HeaderLinnk url="/history">PAST GAMES</HeaderLinnk>
+      <HeaderLinnk url="/coins" disabled>
         COINS
-      </Link>
+      </HeaderLinnk>
       <Dropdown
         className="uppercase mx-auto flex justify-center items-center flex-row"
         content={
-          <ul className="whitespace-nowrap">
+          <ul className="whitespace-nowrap ">
             {Object.keys(NETWORK_TITLES).map((v) => (
               <li
                 className={`${
                   !NETWORK_TITLES[v as Network]?.implemented
                     ? "bg-gray opacity-50 px-2 pointer-events-none"
-                    : "cursor-pointer hover:border-pink "
+                    : "cursor-pointer hover:bg-pink "
                 } border-b flex flex-row justify-start items-center ${
                   network !== v ? "border-dashed" : "border-pink"
                 }`}

@@ -3,13 +3,18 @@ module.exports = {
   theme: {
     extend: {
       borderColor: {
-        DEFAULT: "#000"
+        DEFAULT: "#fff"
       },
       colors: {
         black: "#000",
         white: "#fff",
         gray: "#999",
-        pink: "#FF008A"
+        pink: "#FF00E5",
+        green: "#00FFB2"
+      },
+      fontFamily: {
+        mono: ["Cutive Mono", "monospace"],
+        body: ["Cinzel", "serif"]
       }
     }
   },

@@ -26,13 +26,19 @@ export type WheelOfFortuneData = TypeDef<
 
 export const GamePreview: FC<
   WheelOfFortuneData & { publicKey?: PublicKey }
-> = ({ timestamp, value, publicKey }) => (
-  <p className="border p-2">
-    Active game{" "}
-    {publicKey && <span className="text-pink">{publicKey.toBase58()}</span>}:
-    <br />
-    timestamp: {new Date(timestamp.toNumber() * 1e3).toISOString()}
-    <br />
-    value: {value}
-  </p>
-);
+> = ({ timestamp, value, publicKey }) => {
+  const isActive = value === 0;
+  return (
+    <figure
+      className={`font-mono with-caption ${isActive ? "border-pink" : ""}`}
+    >
+      {isActive && <figcaption className="bg-pink">is active</figcaption>}
+      Active game{" "}
+      {publicKey && <span className="text-pink">{publicKey.toBase58()}</span>}:
+      <br />
+      timestamp: {new Date(timestamp.toNumber() * 1e3).toISOString()}
+      <br />
+      value: {value}
+    </figure>
+  );
+};
