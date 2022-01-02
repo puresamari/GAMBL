@@ -50,7 +50,7 @@ export const Navigation = () => {
   const [network, setNetwork] = useNetwork();
 
   return (
-    <nav className="flex flex-row w-full fixed top-0 left-0 h-16 border-b bg-black">
+    <nav className="flex flex-row w-full fixed top-0 z-40 left-0 h-16 border-b bg-black">
       <Link
         className="hover:bg-green flex items-center px-1 justify-center"
         to="/"
@@ -58,7 +58,7 @@ export const Navigation = () => {
         <img src={require("./assets/GAMBL.png")} className="w-14" />
       </Link>
       <HeaderLinnk url="/how-it-works">HOW?</HeaderLinnk>
-      <HeaderLinnk url="/history">PAST GAMES</HeaderLinnk>
+      <HeaderLinnk url="/games">PAST GAMES</HeaderLinnk>
       <HeaderLinnk url="/coins" disabled>
         COINS
       </HeaderLinnk>

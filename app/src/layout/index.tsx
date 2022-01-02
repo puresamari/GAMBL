@@ -12,7 +12,7 @@ export const Layout: FC<{ children: ReactNode }> = ({ children }) => (
       }}
     />
 
-    <div className="p-4">{children}</div>
+    <div className="p-4 relative">{children}</div>
 
     <div className="flex flex-1" />
     <div className="flex flex-row self-end">Footer</div>

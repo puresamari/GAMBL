@@ -4,7 +4,7 @@ import { useWorkspace } from "../utils/workspace";
 import { WheelOfFortuneData, GamePreview } from "../components/game/preview";
 import { PublicKey } from "@solana/web3.js";
 
-export const History: FC = () => {
+export const Games: FC = () => {
   const workspace = useWorkspace();
   const [games, setGames] = useState<
     { publicKey: PublicKey; account: WheelOfFortuneData }[]

@@ -15,7 +15,8 @@ import React, { FC, useMemo } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 import { Layout } from "./layout";
-import { History } from "./pages/history";
+import { Games } from "./pages/games";
+import { Game } from "./pages/game";
 import { Landing } from "./pages/landing";
 import { useNetwork } from "./utils/network";
 import { useEndpoint } from "./utils/endpoint";
@@ -47,7 +48,8 @@ export const App: FC = () => {
           <Layout>
             <Routes>
               <Route path="/how-it-works" element={<HowItWorks />} />
-              <Route path="/history" element={<History />} />
+              <Route path="/games" element={<Games />} />
+              <Route path="/games/:game_id" element={<Game />} />
               <Route path="/" element={<Landing />} />
             </Routes>
           </Layout>
