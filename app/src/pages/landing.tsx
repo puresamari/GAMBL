@@ -1,12 +1,25 @@
-import { web3 } from "@project-serum/anchor";
+import { ProgramAccount, web3 } from "@project-serum/anchor";
 import { useWallet } from "@solana/wallet-adapter-react";
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 
-import { GamePreview, IGamePreviewData } from "../components/game/preview";
+import { GamePreview, WheelOfFortuneData } from "../components/game/preview";
 import { useWorkspace } from "../utils/workspace";
+import { useActiveGame } from "../utils/api/active-game";
 
 export const Landing: FC = () => {
   const wallet = useWallet();
+
+  const [game, setGame] = useState<
+    ProgramAccount<WheelOfFortuneData> | undefined
+  >();
+  const [transactionError, setTransactionError] = useState<
+    unknown | undefined
+  >();
+
+  const workspace = useWorkspace();
+  const activeGame = useActiveGame(workspace);
+
+  useEffect(() => setGame(activeGame || undefined), [activeGame]);
 
   if (!wallet?.publicKey) {
     return (
@@ -14,19 +27,12 @@ export const Landing: FC = () => {
     );
   }
 
-  const [game, setGame] = useState<IGamePreviewData | undefined>();
-  const [transactionError, setTransactionError] = useState<
-    unknown | undefined
-  >();
-
-  const workspace = useWorkspace();
-
   return (
     <>
       {transactionError && (
         <p className="text-red-500">{transactionError + ""}</p>
       )}
-      {game && <GamePreview {...game} />}
+      {game && <GamePreview {...game?.account} publicKey={game?.publicKey} />}
       {workspace && (
         <button
           onClick={async () => {
@@ -50,12 +56,12 @@ export const Landing: FC = () => {
               });
 
               // Fetch the account details of the created tweet.
-              const gameAccount = await workspace.program.account.wheelOfFortune.fetch(
+              const account = await workspace.program.account.wheelOfFortune.fetch(
                 game.publicKey
               );
 
-              console.log("game account: ", gameAccount);
-              setGame(gameAccount);
+              console.log("game account: ", account);
+              setGame({ account, publicKey: game.publicKey });
             } catch (err) {
               console.error("Transaction error: ", err);
               setTransactionError(err);

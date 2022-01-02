@@ -1,13 +1,13 @@
 import React, { FC, useEffect, useMemo, useState } from "react";
 
 import { useWorkspace } from "../utils/workspace";
-import { IGamePreviewData, GamePreview } from "../components/game/preview";
+import { WheelOfFortuneData, GamePreview } from "../components/game/preview";
 import { PublicKey } from "@solana/web3.js";
 
 export const History: FC = () => {
   const workspace = useWorkspace();
   const [games, setGames] = useState<
-    { publicKey: PublicKey; account: IGamePreviewData }[]
+    { publicKey: PublicKey; account: WheelOfFortuneData }[]
   >();
 
   useEffect(() => {
