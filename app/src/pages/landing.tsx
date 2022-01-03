@@ -36,7 +36,6 @@ export const Landing: FC = () => {
       {wallet?.publicKey && workspace && (
         <button
           onClick={async () => {
-            console.log(wallet);
             if (!wallet.publicKey) {
               setTransactionError(
                 "Somehow your wallet doesn't have a public key lol"

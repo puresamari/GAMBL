@@ -1,12 +1,27 @@
+import { web3 } from "@project-serum/anchor";
+import { useWallet } from "@solana/wallet-adapter-react";
 import React, { FC, useEffect, useMemo, useState } from "react";
-
-import { useWorkspace } from "../utils/workspace";
-import { WheelOfFortuneData, GamePreview } from "../components/game/preview";
-import { PublicKey } from "@solana/web3.js";
 import { Link, useParams } from "react-router-dom";
+
+import { AccountLink } from "../components/account-link";
+import { useGame } from "../utils/api/game";
+import { useBets } from "../utils/api/bets";
+import { useWorkspace } from "../utils/workspace";
+import { BetPreview } from "../components/bet-preview";
 
 export const Game: FC = () => {
   const { game_id } = useParams();
+  const game = useGame(game_id);
+  const bets = useBets(game_id);
+
+  const wallet = useWallet();
+
+  const [transactionError, setTransactionError] = useState<
+    unknown | undefined
+  >();
+
+  const workspace = useWorkspace();
+
   return (
     <>
       <div className="flex flex-row items-start  sticky top-0">
@@ -17,7 +32,50 @@ export const Game: FC = () => {
           {"<"} Back
         </Link>
       </div>
-      <p>{game_id}</p>
+      {transactionError && (
+        <p className="text-red-500">{transactionError + ""}</p>
+      )}
+      {game && (
+        <>
+          <AccountLink publicKey={game.publicKey} />
+          <br />
+          {wallet.publicKey && workspace && (
+            <button
+              onClick={async () => {
+                try {
+                  // const game = web3.Keypair.generate();
+
+                  const bet = web3.Keypair.generate();
+
+                  await workspace.program.rpc.makeBet(game.publicKey, 10, {
+                    accounts: {
+                      bet: bet.publicKey,
+                      author: workspace.provider.wallet.publicKey,
+                      systemProgram: web3.SystemProgram.programId
+                    },
+                    signers: [bet]
+                  });
+
+                  // Fetch the account details of the created tweet.
+                  const betAccount = await workspace.program.account.wheelOfFortuneBet.fetch(
+                    bet.publicKey
+                  );
+                  console.log(betAccount);
+                } catch (err) {
+                  console.error("Transaction error: ", err);
+                  setTransactionError(err);
+                }
+              }}
+            >
+              Bet on this game
+            </button>
+          )}
+          <hr className="my-4" />
+          <h1>This game's bets</h1>
+          {bets &&
+            bets.map((v) => <BetPreview key={v.publicKey.toBase58()} {...v} />)}
+        </>
+      )}
     </>
   );
   // const workspace = useWorkspace();

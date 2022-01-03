@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 import { Gambl } from "../../utils/gambl";
 import { useNetwork } from "../../utils/network";
+import { AccountLink } from "../account-link";
 import { CursorShadow } from "../cursor-shadow";
 
 export type WheelOfFortuneData = TypeDef<
@@ -31,7 +32,6 @@ export const GamePreview: FC<
   WheelOfFortuneData & { publicKey?: PublicKey }
 > = ({ timestamp, value, publicKey }) => {
   const isActive = value === 0;
-  const network = useNetwork();
   const navigate = useNavigate();
   return (
     <CursorShadow>
@@ -42,19 +42,7 @@ export const GamePreview: FC<
         } font-mono with-caption ${isActive ? "border-pink" : ""}`}
       >
         {isActive && <figcaption className="bg-pink">is active</figcaption>}
-        Active game:{" "}
-        {network && publicKey && (
-          <a
-            href={`https://explorer.solana.com/address/${publicKey.toBase58()}?cluster=${
-              network[0]
-            }`}
-            target="_blank"
-            rel="noreferrer"
-            className="text-pink underline hover:no-underline"
-          >
-            {publicKey.toBase58()}
-          </a>
-        )}
+        Active game: {publicKey && <AccountLink publicKey={publicKey} />}
         <br />
         timestamp: {new Date(timestamp.toNumber() * 1e3).toISOString()}
         <br />
