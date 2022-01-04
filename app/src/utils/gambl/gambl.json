@@ -37,7 +37,27 @@
           "isSigner": true
         },
         {
+          "name": "authorToken",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "receiverToken",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
           "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "mint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
           "isMut": false,
           "isSigner": false
         }
@@ -50,6 +70,10 @@
         {
           "name": "value",
           "type": "i8"
+        },
+        {
+          "name": "betFee",
+          "type": "u64"
         }
       ]
     },
@@ -107,6 +131,10 @@
           {
             "name": "value",
             "type": "i8"
+          },
+          {
+            "name": "bet",
+            "type": "u64"
           }
         ]
       }

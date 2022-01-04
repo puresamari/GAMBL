@@ -1,9 +1,8 @@
-import { useEffect } from 'react';
-import { useState } from 'react';
 import { Program, Provider, web3 } from '@project-serum/anchor';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { Connection, PublicKey } from '@solana/web3.js';
-import { useMemo } from 'react';
+import { useEffect } from 'react';
+import { useState } from 'react';
 
 import { useEndpoint } from './endpoint';
 import { Gambl, IDL } from './gambl';

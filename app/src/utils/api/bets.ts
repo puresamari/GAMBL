@@ -1,20 +1,12 @@
 import { ProgramAccount } from '@project-serum/anchor';
-import { bs58 } from '@project-serum/anchor/dist/cjs/utils/bytes';
 import { useEffect } from 'react';
 import { useState } from 'react';
 
-import { WheelOfFortuneBetData } from '../../components/bet-preview';
+import { WheelOfFortuneBetData } from '../gambl';
 import { useWorkspace } from '../workspace';
 
 const DISCRIMINATOR_LENGTH = 8;
-// const TIMESTAMP_LENGTH = 8;
 const PUBLIC_KEY_LENGTH = 32;
-// const TIMESTAMP_LENGTH: usize = 8;
-// const WHEEL_VALUE_LENGTH: usize = 1;
-// pub author: Pubkey,
-// pub game: Pubkey, // Which game is being bet on
-// pub timestamp: i64,
-// pub value: i8
 
 export const useBets = (game_id?: string): ProgramAccount<WheelOfFortuneBetData>[] | undefined | null => {
   const [bets, setBets] = useState<ProgramAccount<WheelOfFortuneBetData>[] | null | undefined>(null);

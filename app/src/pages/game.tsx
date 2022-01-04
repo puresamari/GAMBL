@@ -1,4 +1,4 @@
-import { web3 } from "@project-serum/anchor";
+import { BN, web3 } from "@project-serum/anchor";
 import { useWallet } from "@solana/wallet-adapter-react";
 import React, { FC, useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
@@ -6,6 +6,7 @@ import { Link, useParams } from "react-router-dom";
 import { AccountLink } from "../components/account-link";
 import { useGame } from "../utils/api/game";
 import { useBets } from "../utils/api/bets";
+import { MakeBet } from "../utils/api/make-bet";
 import { useWorkspace } from "../utils/workspace";
 import { BetPreview } from "../components/bet-preview";
 
@@ -43,24 +44,29 @@ export const Game: FC = () => {
             <button
               onClick={async () => {
                 try {
-                  // const game = web3.Keypair.generate();
-
-                  const bet = web3.Keypair.generate();
-
-                  await workspace.program.rpc.makeBet(game.publicKey, 10, {
-                    accounts: {
-                      bet: bet.publicKey,
-                      author: workspace.provider.wallet.publicKey,
-                      systemProgram: web3.SystemProgram.programId
-                    },
-                    signers: [bet]
-                  });
-
-                  // Fetch the account details of the created tweet.
-                  const betAccount = await workspace.program.account.wheelOfFortuneBet.fetch(
-                    bet.publicKey
+                  const bet = await MakeBet(
+                    workspace,
+                    game.publicKey,
+                    new BN(1e9)
                   );
-                  console.log(betAccount);
+                  // // const game = web3.Keypair.generate();
+
+                  // const bet = web3.Keypair.generate();
+
+                  // await workspace.program.rpc.makeBet(game.publicKey, 10, {
+                  //   accounts: {
+                  //     bet: bet.publicKey,
+                  //     author: workspace.provider.wallet.publicKey,
+                  //     systemProgram: web3.SystemProgram.programId
+                  //   },
+                  //   signers: [bet]
+                  // });
+
+                  // // Fetch the account details of the created tweet.
+                  // const betAccount = await workspace.program.account.wheelOfFortuneBet.fetch(
+                  //   bet.publicKey
+                  // );
+                  // console.log(betAccount);
                 } catch (err) {
                   console.error("Transaction error: ", err);
                   setTransactionError(err);

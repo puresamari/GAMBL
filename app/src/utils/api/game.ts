@@ -1,11 +1,10 @@
 import { ProgramAccount } from '@project-serum/anchor';
-import { bs58 } from '@project-serum/anchor/dist/cjs/utils/bytes';
 import { PublicKey } from '@solana/web3.js';
 import { useEffect } from 'react';
 import { useState } from 'react';
 
-import { WheelOfFortuneData } from '../../components/game/preview';
-import { useWorkspace, Workspace } from '../workspace';
+import { WheelOfFortuneData } from '../gambl';
+import { useWorkspace } from '../workspace';
 
 const DISCRIMINATOR_LENGTH = 8;
 const TIMESTAMP_LENGTH = 8;

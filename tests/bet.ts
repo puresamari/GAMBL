@@ -161,6 +161,7 @@ describe('Bet', () => {
     // Ensure it has the right data.
     assert.equal(betAccount.author.toBase58(), program.provider.wallet.publicKey.toBase58());
     assert.equal(betAccount.game.toBase58(), game.publicKey.toBase58());
+    assert.equal(betAccount.bet.toNumber(), new anchor.BN(1e6).toNumber());
     assert.equal(betAccount.value, 0);
     assert.ok(betAccount.timestamp);
   });

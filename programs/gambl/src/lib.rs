@@ -60,7 +60,6 @@ pub mod gambl {
     Ok(())
   }
 
-  // TODO: Should be able to determine the amount to bet
   // TODO: Needs to collect the 11 byte rent fee
   pub fn make_bet(ctx: Context<MakeBet>, game: Pubkey, value: i8, bet_fee: u64) -> ProgramResult {
     
@@ -83,6 +82,7 @@ pub mod gambl {
     bet.author = *author.key;
     bet.timestamp = clock.unix_timestamp;
     bet.game = game;
+    bet.bet = bet_fee;
     
     Ok(())
   }

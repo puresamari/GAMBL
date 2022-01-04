@@ -2,9 +2,10 @@ import { ProgramAccount, web3 } from "@project-serum/anchor";
 import { useWallet } from "@solana/wallet-adapter-react";
 import React, { FC, useEffect, useState } from "react";
 
-import { GamePreview, WheelOfFortuneData } from "../components/game/preview";
-import { useWorkspace } from "../utils/workspace";
+import { GamePreview } from "../components/game/preview";
 import { useActiveGame } from "../utils/api/active-game";
+import { WheelOfFortuneData } from "../utils/gambl";
+import { useWorkspace } from "../utils/workspace";
 
 export const Landing: FC = () => {
   const wallet = useWallet();

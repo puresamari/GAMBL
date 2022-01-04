@@ -16,6 +16,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 import { Layout } from "./layout";
 import { Games } from "./pages/games";
+import { CoinsPage } from "./pages/coins";
 import { Game } from "./pages/game";
 import { Landing } from "./pages/landing";
 import { useNetwork } from "./utils/network";
@@ -50,6 +51,7 @@ export const App: FC = () => {
               <Route path="/how-it-works" element={<HowItWorks />} />
               <Route path="/games" element={<Games />} />
               <Route path="/games/:game_id" element={<Game />} />
+              <Route path="/coins" element={<CoinsPage />} />
               <Route path="/" element={<Landing />} />
             </Routes>
           </Layout>

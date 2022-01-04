@@ -9,11 +9,11 @@ export const NETWORK_TITLES: { [network in Network]: { title: string, implemente
   "mainnet-beta": { title: 'Mainnet (Beta)', implemented: false },
   devnet: { title: 'Devnet', implemented: true },
   testnet: { title: 'Testnet', implemented: false },
-  local: { title: 'Local ledger', implemented: true }
+  local: { title: 'Local ledger', implemented: false }
 };
 
 const NetworkBehav = new BehaviorSubject<Network>(
-  process.env.NODE_ENV === 'development' ? 'local' :
+  process.env.NODE_ENV === 'development' ? WalletAdapterNetwork.Devnet :
     (Object.keys(NETWORK_TITLES) as Network[]).find(v => NETWORK_TITLES[v as Network]?.implemented) || WalletAdapterNetwork.Devnet);
 
 export const $network = NetworkBehav.pipe(
@@ -27,3 +27,5 @@ export const useNetwork = (): [Network, (network: Network) => void] => {
 
   return [network, network => NetworkBehav.next(network)];
 };
+
+export const GetStaticNetworkValue = () => NetworkBehav.getValue();

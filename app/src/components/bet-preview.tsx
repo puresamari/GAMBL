@@ -1,38 +1,10 @@
-import { TypeDef } from "@project-serum/anchor/dist/cjs/program/namespace/types";
+import { BN } from "@project-serum/anchor";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { PublicKey } from "@solana/web3.js";
 import React, { FC } from "react";
 
-import { Gambl } from "../utils/gambl";
+import { WheelOfFortuneBetData } from "../utils/gambl";
 import { AccountLink } from "./account-link";
-
-export type WheelOfFortuneBetData = TypeDef<
-  {
-    name: "wheelOfFortuneBet";
-    type: {
-      kind: "struct";
-      fields: [
-        {
-          name: "author";
-          type: "publicKey";
-        },
-        {
-          name: "game";
-          type: "publicKey";
-        },
-        {
-          name: "timestamp";
-          type: "i64";
-        },
-        {
-          name: "value";
-          type: "i8";
-        }
-      ];
-    };
-  },
-  Gambl
->;
 
 export const BetPreview: FC<{
   account: WheelOfFortuneBetData;
@@ -61,7 +33,7 @@ export const BetPreview: FC<{
       <br />
       timestamp: {new Date(account.timestamp.toNumber() * 1e3).toISOString()}
       <br />
-      value: {1} GAMBL
+      value: {account.bet.div(new BN(1e9)).toString()} GAMBL
     </figure>
   );
 };

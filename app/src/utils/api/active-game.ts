@@ -3,7 +3,7 @@ import { bs58 } from '@project-serum/anchor/dist/cjs/utils/bytes';
 import { useEffect } from 'react';
 import { useState } from 'react';
 
-import { WheelOfFortuneData } from './../../components/game/preview';
+import { WheelOfFortuneData } from '../gambl';
 import { Workspace } from './../workspace';
 
 const DISCRIMINATOR_LENGTH = 8;

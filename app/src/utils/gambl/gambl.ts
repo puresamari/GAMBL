@@ -37,7 +37,27 @@ export type Gambl = {
           "isSigner": true
         },
         {
+          "name": "authorToken",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "receiverToken",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
           "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "mint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
           "isMut": false,
           "isSigner": false
         }
@@ -50,6 +70,10 @@ export type Gambl = {
         {
           "name": "value",
           "type": "i8"
+        },
+        {
+          "name": "betFee",
+          "type": "u64"
         }
       ]
     },
@@ -107,6 +131,10 @@ export type Gambl = {
           {
             "name": "value",
             "type": "i8"
+          },
+          {
+            "name": "bet",
+            "type": "u64"
           }
         ]
       }
@@ -160,7 +188,27 @@ export const IDL: Gambl = {
           "isSigner": true
         },
         {
+          "name": "authorToken",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "receiverToken",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
           "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "mint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
           "isMut": false,
           "isSigner": false
         }
@@ -173,6 +221,10 @@ export const IDL: Gambl = {
         {
           "name": "value",
           "type": "i8"
+        },
+        {
+          "name": "betFee",
+          "type": "u64"
         }
       ]
     },
@@ -230,6 +282,10 @@ export const IDL: Gambl = {
           {
             "name": "value",
             "type": "i8"
+          },
+          {
+            "name": "bet",
+            "type": "u64"
           }
         ]
       }

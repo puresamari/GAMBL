@@ -1,32 +1,10 @@
-import { TypeDef } from "@project-serum/anchor/dist/cjs/program/namespace/types";
 import { PublicKey } from "@solana/web3.js";
 import React, { FC } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-import { Gambl } from "../../utils/gambl";
-import { useNetwork } from "../../utils/network";
+import { WheelOfFortuneData } from "../../utils/gambl";
 import { AccountLink } from "../account-link";
 import { CursorShadow } from "../cursor-shadow";
-
-export type WheelOfFortuneData = TypeDef<
-  {
-    name: "wheelOfFortune";
-    type: {
-      kind: "struct";
-      fields: [
-        {
-          name: "timestamp";
-          type: "i64";
-        },
-        {
-          name: "value";
-          type: "i8";
-        }
-      ];
-    };
-  },
-  Gambl
->;
 
 export const GamePreview: FC<
   WheelOfFortuneData & { publicKey?: PublicKey }

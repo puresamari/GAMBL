@@ -1,8 +1,9 @@
+import { PublicKey } from "@solana/web3.js";
 import React, { FC, useEffect, useMemo, useState } from "react";
 
+import { GamePreview } from "../components/game/preview";
+import { WheelOfFortuneData } from "../utils/gambl";
 import { useWorkspace } from "../utils/workspace";
-import { WheelOfFortuneData, GamePreview } from "../components/game/preview";
-import { PublicKey } from "@solana/web3.js";
 
 export const Games: FC = () => {
   const workspace = useWorkspace();

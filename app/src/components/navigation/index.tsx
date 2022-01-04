@@ -59,8 +59,9 @@ export const Navigation = () => {
       </Link>
       <HeaderLinnk url="/how-it-works">HOW?</HeaderLinnk>
       <HeaderLinnk url="/games">PAST GAMES</HeaderLinnk>
-      <HeaderLinnk url="/coins" disabled>
-        COINS
+      <HeaderLinnk url="/coins">COINS</HeaderLinnk>
+      <HeaderLinnk url="/updates" disabled>
+        Updates
       </HeaderLinnk>
       <Dropdown
         className="uppercase mx-auto flex justify-center items-center flex-row"
