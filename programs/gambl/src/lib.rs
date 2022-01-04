@@ -1,5 +1,6 @@
 use anchor_lang::prelude::*;
 use anchor_lang::solana_program::system_program;
+use anchor_spl::token::{self, Token, Mint, TokenAccount, Transfer};
 
 declare_id!("9781DbQ5tRn1fUi7KrcnuaQq52138QaJCcQ9coX1ydFF");
 
@@ -7,6 +8,7 @@ const DISCRIMINATOR_LENGTH: usize = 8;
 const PUBLIC_KEY_LENGTH: usize = 32;
 const TIMESTAMP_LENGTH: usize = 8;
 const WHEEL_VALUE_LENGTH: usize = 1;
+const BET_LENGTH: usize = 8; // 64 bit
 
 #[account]
 pub struct WheelOfFortune {
@@ -26,7 +28,9 @@ pub struct WheelOfFortuneBet {
   pub author: Pubkey,
   pub game: Pubkey, // Which game is being bet on
   pub timestamp: i64,
-  pub value: i8
+  pub value: i8, // Wheel value the wallet betted on
+  // pub token_account: Pubkey, // Which game is being bet on
+  pub bet: u64 // betted amount
 }
 
 
@@ -36,7 +40,8 @@ impl WheelOfFortuneBet {
       + PUBLIC_KEY_LENGTH // author.
       + PUBLIC_KEY_LENGTH // game.
       + TIMESTAMP_LENGTH // timestamp.
-      + WHEEL_VALUE_LENGTH; // value.
+      + WHEEL_VALUE_LENGTH // value
+      + BET_LENGTH; // betted amount
 }
 
 
@@ -57,7 +62,16 @@ pub mod gambl {
 
   // TODO: Should be able to determine the amount to bet
   // TODO: Needs to collect the 11 byte rent fee
-  pub fn make_bet(ctx: Context<MakeBet>, game: Pubkey, value: i8) -> ProgramResult {
+  pub fn make_bet(ctx: Context<MakeBet>, game: Pubkey, value: i8, bet_fee: u64) -> ProgramResult {
+    
+    msg!("starting tokens: {}", ctx.accounts.author_token.amount);
+
+    token::transfer(ctx.accounts.transfer_ctx(), bet_fee)?;
+    ctx.accounts.author_token.reload()?;
+    ctx.accounts.receiver_token.reload()?;
+
+    msg!("remaining tokens: {}", ctx.accounts.author_token.amount);
+      
     let bet: &mut Account<WheelOfFortuneBet> = &mut ctx.accounts.bet;
     let author: &Signer = &ctx.accounts.author;
     let clock: Clock = Clock::get().unwrap();
@@ -65,7 +79,7 @@ pub mod gambl {
     if value == 0 {
       return Err(ErrorCode::BetValue0Reserved.into())
     }
-
+    
     bet.author = *author.key;
     bet.timestamp = clock.unix_timestamp;
     bet.game = game;
@@ -84,27 +98,7 @@ pub mod gambl {
 
     Ok(())
   }
-
-  // pub fn send_tweet(ctx: Context<SendTweet>, topic: String, content: String) -> ProgramResult {
-  //   let tweet: &mut Account<Tweet> = &mut ctx.accounts.tweet;
-  //   let author: &Signer = &ctx.accounts.author;
-  //   let clock: Clock = Clock::get().unwrap();
-
-  //   if topic.chars().count() > 50 {
-  //     return Err(ErrorCode::TopicTooLong.into())
-  //   }
-
-  //   if content.chars().count() > 280 {
-  //     return Err(ErrorCode::ContentTooLong.into())
-  //   }
-
-  //   tweet.author = *author.key;
-  //   tweet.timestamp = clock.unix_timestamp;
-  //   tweet.topic = topic;
-  //   tweet.content = content;
-
-  //   Ok(())
-  // }
+  
 }
 
 #[derive(Accounts)]
@@ -127,9 +121,48 @@ pub struct MakeBet<'info> {
   
   #[account(mut)]
   pub author: Signer<'info>,
+  #[account(mut)]
+  pub author_token: Account<'info, TokenAccount>,
+
+  // // TODO: This should always be either the account owner or the account itself if possible and therefore not a transaction info
+  #[account(mut)]
+  pub receiver_token: Account<'info, TokenAccount>,
   
   #[account(address = system_program::ID)]
   pub system_program: AccountInfo<'info>,
+
+  // TODO: Somehow have the mint baked in. it should always be GAMBL
+  pub mint: Account<'info, Mint>,
+  pub token_program: Program<'info, Token>,
+}
+
+
+impl<'info> MakeBet<'info> {
+  fn transfer_ctx(&self) -> CpiContext<'_, '_, '_, 'info, Transfer<'info>> {
+    CpiContext::new(
+      self.token_program.to_account_info(),
+      Transfer {
+        from: self.author_token.to_account_info(),
+        to: self.receiver_token.to_account_info(),
+        authority: self.author.to_account_info()
+      }
+    )
+  }
+  // Maybe later at some point we'll implement so that a token associated account is created for the bet account so we can make sure the tokens are actually there
+//   fn initialize_account_ctx(&self) -> CpiContext<'_, '_, '_, 'info, InitializeAccount<'info>> {
+//     CpiContext::new(
+//       self.token_program.to_account_info(),
+//       InitializeAccount {
+//         rent: self.bet.to_account_info(),
+//         account: self.bet.to_account_info(),
+//         mint: self.mint.to_account_info(),
+//         authority: self.bet.to_account_info(),
+//         // from: self.author_token.to_account_info(),
+//         // to: self.receiver_token.to_account_info(),
+//         // authority: self.author.to_account_info()
+//       }
+//     )
+//   }
 }
 
 #[derive(Accounts)]

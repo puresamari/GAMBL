@@ -2,7 +2,7 @@
 gambl = "9781DbQ5tRn1fUi7KrcnuaQq52138QaJCcQ9coX1ydFF"
 
 [programs.devnet]
-solana_twitter = "2BDbYV1ocs2S1PsYnd5c5mqtdLWGf5VbCYvf28rs9LGj"
+gambl = "9781DbQ5tRn1fUi7KrcnuaQq52138QaJCcQ9coX1ydFF"
 
 [registry]
 url = "https://anchor.projectserum.com"
