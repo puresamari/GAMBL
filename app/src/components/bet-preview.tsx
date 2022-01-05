@@ -33,7 +33,9 @@ export const BetPreview: FC<{
       <br />
       timestamp: {new Date(account.timestamp.toNumber() * 1e3).toISOString()}
       <br />
-      value: {account.bet.div(new BN(1e9)).toString()} GAMBL
+      bet on value: {account.value}
+      <br />
+      betted coins: {account.bet.div(new BN(1e9)).toString()} GAMBL
     </figure>
   );
 };

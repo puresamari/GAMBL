@@ -13,3 +13,13 @@ figure.with-caption {
 figcaption {
   @apply absolute top-0 left-0 font-body text-sm px-2 italic;
 }
+
+input[type="submit"] {
+  @apply border border-pink text-pink px-1 cursor-pointer;
+}
+input[type="submit"]:disabled {
+  @apply border-opacity-50 text-opacity-50 pointer-events-none;
+}
+input[type="submit"]:not(:disabled):hover {
+  @apply text-white bg-pink;
+}

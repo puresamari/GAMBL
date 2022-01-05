@@ -10,6 +10,7 @@ import { GetStaticTokenInfoValue } from './../spl';
 export const MakeBet = async (
   workspace: Workspace,
   game: PublicKey,
+  value: number,
   amount: BN
 ): Promise<ProgramAccount<WheelOfFortuneBetData> | undefined> => {
   // const game = web3.Keypair.generate();
@@ -21,7 +22,7 @@ export const MakeBet = async (
 
   const bet = web3.Keypair.generate();
 
-  await workspace.program.rpc.makeBet(game, 10, amount, {
+  await workspace.program.rpc.makeBet(game, value, amount, {
     accounts: {
       bet: bet.publicKey,
       author: workspace.program.provider.wallet.publicKey,

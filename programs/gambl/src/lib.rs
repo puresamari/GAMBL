@@ -83,6 +83,7 @@ pub mod gambl {
     bet.timestamp = clock.unix_timestamp;
     bet.game = game;
     bet.bet = bet_fee;
+    bet.value = value;
     
     Ok(())
   }

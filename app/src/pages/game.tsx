@@ -9,6 +9,7 @@ import { useBets } from "../utils/api/bets";
 import { MakeBet } from "../utils/api/make-bet";
 import { useWorkspace } from "../utils/workspace";
 import { BetPreview } from "../components/bet-preview";
+import { LabelInput } from "../components/input/label-input";
 
 export const Game: FC = () => {
   const { game_id } = useParams();
@@ -22,6 +23,8 @@ export const Game: FC = () => {
   >();
 
   const workspace = useWorkspace();
+  const [bettingValue, setBettingValue] = useState(1);
+  const [bettingCoins, setBettingCoins] = useState(0);
 
   return (
     <>
@@ -41,40 +44,45 @@ export const Game: FC = () => {
           <AccountLink publicKey={game.publicKey} />
           <br />
           {wallet.publicKey && workspace && (
-            <button
-              onClick={async () => {
+            <form
+              className="border flex flex-col p-1 justify-start items-start"
+              onSubmit={async (e) => {
+                e.preventDefault();
                 try {
                   const bet = await MakeBet(
                     workspace,
                     game.publicKey,
-                    new BN(1e9)
+                    bettingValue,
+                    new BN(bettingCoins * 1e9)
                   );
-                  // // const game = web3.Keypair.generate();
-
-                  // const bet = web3.Keypair.generate();
-
-                  // await workspace.program.rpc.makeBet(game.publicKey, 10, {
-                  //   accounts: {
-                  //     bet: bet.publicKey,
-                  //     author: workspace.provider.wallet.publicKey,
-                  //     systemProgram: web3.SystemProgram.programId
-                  //   },
-                  //   signers: [bet]
-                  // });
-
-                  // // Fetch the account details of the created tweet.
-                  // const betAccount = await workspace.program.account.wheelOfFortuneBet.fetch(
-                  //   bet.publicKey
-                  // );
-                  // console.log(betAccount);
                 } catch (err) {
                   console.error("Transaction error: ", err);
                   setTransactionError(err);
                 }
               }}
             >
-              Bet on this game
-            </button>
+              <LabelInput
+                className="mb-2"
+                type="number"
+                min={1}
+                step={1}
+                max={255}
+                value={bettingValue}
+                onChange={(e) => setBettingValue(parseInt(e.target.value))}
+              >
+                Value (on wheel)
+              </LabelInput>
+              <LabelInput
+                className="mb-2"
+                type="number"
+                step={0.000000001}
+                value={bettingCoins}
+                onChange={(e) => setBettingCoins(parseFloat(e.target.value))}
+              >
+                Bet (GAMBL Coins):
+              </LabelInput>
+              <input className="flex" type="submit" value="Place bet" />
+            </form>
           )}
           <hr className="my-4" />
           <h1>This game's bets</h1>
