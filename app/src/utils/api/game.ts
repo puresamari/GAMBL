@@ -19,6 +19,7 @@ export const useGame = (game_id?: string): ProgramAccount<WheelOfFortuneData> | 
     }
     let active = true;
     let timeout: NodeJS.Timeout;
+    let gameBefore: WheelOfFortuneData | undefined = undefined;
     load();
     return () => {
       active = false;
@@ -29,11 +30,14 @@ export const useGame = (game_id?: string): ProgramAccount<WheelOfFortuneData> | 
       if (!workspace || !game_id) {
         return;
       }
-      const game = await workspace.program.account.wheelOfFortune.fetch(game_id);
-      setGame(({
-        publicKey: new PublicKey(game_id),
-        account: game
-      }));
+      const nGame = await workspace.program.account.wheelOfFortune.fetch(game_id);
+      if (JSON.stringify(gameBefore) !== JSON.stringify(nGame)) {
+        gameBefore = nGame;
+        setGame(({
+          publicKey: new PublicKey(game_id),
+          account: nGame
+        }));
+      }
       timeout = setTimeout(() => load(), 5000);
     }
   }, [workspace]);

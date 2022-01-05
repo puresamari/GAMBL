@@ -18,6 +18,7 @@ export const useBets = (game_id?: string): ProgramAccount<WheelOfFortuneBetData>
     }
     let active = true;
     let timeout: NodeJS.Timeout;
+    let before: ProgramAccount<WheelOfFortuneBetData>[] = [];
     load();
     return () => {
       active = false;
@@ -34,7 +35,10 @@ export const useBets = (game_id?: string): ProgramAccount<WheelOfFortuneBetData>
           bytes: game_id
         }
       }]);
-      setBets(res);
+      if (before.length !== res.length) {
+        setBets(res);
+        before = res;
+      }
       timeout = setTimeout(() => load(), 5000);
     }
   }, [workspace]);

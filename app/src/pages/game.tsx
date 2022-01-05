@@ -9,6 +9,7 @@ import { useBets } from "../utils/api/bets";
 import { MakeBet } from "../utils/api/make-bet";
 import { useWorkspace } from "../utils/workspace";
 import { BetPreview } from "../components/bet-preview";
+import { Wheel } from "../components/wheel";
 import { LabelInput } from "../components/input/label-input";
 
 export const Game: FC = () => {
@@ -36,17 +37,29 @@ export const Game: FC = () => {
           {"<"} Back
         </Link>
       </div>
+      {!wallet?.publicKey && (
+        <p className="flex flex-row justify-end mb-4">
+          connect your wallet to bet on this game!
+          <span className="animate-bounce mx-8">☝️</span>
+        </p>
+      )}
+      {game && <Wheel value={game.account.value} />}
       {transactionError && (
         <p className="text-red-500">{transactionError + ""}</p>
       )}
       {game && (
         <>
-          <AccountLink publicKey={game.publicKey} />
+          {
+            <p className="mt-4">
+              Game address: <AccountLink publicKey={game.publicKey} />
+            </p>
+          }
           <br />
           {wallet.publicKey && workspace && (
             <form
               className="border flex flex-col p-1 justify-start items-start"
               onSubmit={async (e) => {
+                setTransactionError(undefined);
                 e.preventDefault();
                 try {
                   const bet = await MakeBet(
