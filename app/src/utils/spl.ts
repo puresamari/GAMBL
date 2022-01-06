@@ -33,8 +33,8 @@ const SPL_TOKEN_ADDRESSES: {
   },
   // TODO: This is always going to change no?
   'local': {
-    mint_address: new PublicKey('BR1gidGgZ1MiT71NARXv6Rh1dxZDxty7c8cZYPYX2Hn3'),
-    token_account: new PublicKey('BR1gidGgZ1MiT71NARXv6Rh1dxZDxty7c8cZYPYX2Hn3')
+    mint_address: new PublicKey('GfLBoTowwKnCkC363SCBWXJ6fTNzHVvbX5MjHXNCddbT'),
+    token_account: new PublicKey('C8JMu4AWbnWYiG37R6fjR7hoB7mcaSnqHy5aYJiEUHmM')
   }
 };
 

@@ -9,7 +9,7 @@ export const NETWORK_TITLES: { [network in Network]: { title: string, implemente
   "mainnet-beta": { title: 'Mainnet (Beta)', implemented: false },
   devnet: { title: 'Devnet', implemented: true },
   testnet: { title: 'Testnet', implemented: false },
-  local: { title: 'Local ledger', implemented: false }
+  local: { title: 'Local ledger', implemented: true }
 };
 
 const NetworkBehav = new BehaviorSubject<Network>(

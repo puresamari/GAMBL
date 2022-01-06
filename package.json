@@ -1,5 +1,6 @@
 {
   "scripts": {
+    "start": "nodemon --watch programs --exec anchor localnet --ext rs,toml",
     "app:start": "npm --prefix=app/ start",
     "app:test": "npm run --prefix=app/ test",
     "build": "anchor build && cp target/types/gambl.ts app/src/utils/gambl && cp target/idl/gambl.json app/src/utils/gambl"

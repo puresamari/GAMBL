@@ -7,6 +7,7 @@ import { AccountLink } from "../components/account-link";
 import { useGame } from "../utils/api/game";
 import { useBets } from "../utils/api/bets";
 import { MakeBet } from "../utils/api/make-bet";
+import { PlayGame } from "../utils/api/play-game";
 import { useWorkspace } from "../utils/workspace";
 import { BetPreview } from "../components/bet-preview";
 import { Wheel } from "../components/wheel";
@@ -27,6 +28,8 @@ export const Game: FC = () => {
   const [bettingValue, setBettingValue] = useState(1);
   const [bettingCoins, setBettingCoins] = useState(0);
 
+  console.log(game);
+
   return (
     <>
       <div className="flex flex-row items-start  sticky top-0">
@@ -44,6 +47,12 @@ export const Game: FC = () => {
         </p>
       )}
       {game && <Wheel value={game.account.value} />}
+      {wallet?.publicKey && workspace && game && game.publicKey && (
+        // game.account.value === 0 &&
+        <button onClick={() => PlayGame(workspace, game.publicKey)}>
+          Spin the wheels!
+        </button>
+      )}
       {transactionError && (
         <p className="text-red-500">{transactionError + ""}</p>
       )}
@@ -55,7 +64,7 @@ export const Game: FC = () => {
             </p>
           }
           <br />
-          {wallet.publicKey && workspace && (
+          {wallet.publicKey && game.account.value === 0 && workspace && (
             <form
               className="border flex flex-col p-1 justify-start items-start"
               onSubmit={async (e) => {

@@ -13,7 +13,7 @@ const BET_LENGTH: usize = 8; // 64 bit
 #[account]
 pub struct WheelOfFortune {
   pub timestamp: i64,
-  pub value: i8
+  pub value: u8
 }
 
 // Add a constant on the WheelOfFortune account that provides its total size.
@@ -28,7 +28,7 @@ pub struct WheelOfFortuneBet {
   pub author: Pubkey,
   pub game: Pubkey, // Which game is being bet on
   pub timestamp: i64,
-  pub value: i8, // Wheel value the wallet betted on
+  pub value: u8, // Wheel value the wallet betted on
   // pub token_account: Pubkey, // Which game is being bet on
   pub bet: u64 // betted amount
 }
@@ -56,21 +56,18 @@ pub mod gambl {
 
     game.timestamp = clock.unix_timestamp;
     game.value = 0;
+    msg!("GAME: {}", game.value);
 
     Ok(())
   }
 
   // TODO: Needs to collect the 11 byte rent fee
-  pub fn make_bet(ctx: Context<MakeBet>, game: Pubkey, value: i8, bet_fee: u64) -> ProgramResult {
+  pub fn make_bet(ctx: Context<MakeBet>, game: Pubkey, value: u8, bet_fee: u64) -> ProgramResult {
     
-    msg!("starting tokens: {}", ctx.accounts.author_token.amount);
-
     token::transfer(ctx.accounts.transfer_ctx(), bet_fee)?;
     ctx.accounts.author_token.reload()?;
     ctx.accounts.receiver_token.reload()?;
 
-    msg!("remaining tokens: {}", ctx.accounts.author_token.amount);
-      
     let bet: &mut Account<WheelOfFortuneBet> = &mut ctx.accounts.bet;
     let author: &Signer = &ctx.accounts.author;
     let clock: Clock = Clock::get().unwrap();
@@ -88,14 +85,21 @@ pub mod gambl {
     Ok(())
   }
 
-  // TODO: Block finished games from being played again.
+  // TODO: This is janky again
   pub fn play(ctx: Context<PlayGame>) -> ProgramResult {
     let game: &mut Account<WheelOfFortune> = &mut ctx.accounts.game;
     let clock: Clock = Clock::get().unwrap();
 
-    // TODO: I created a very janky random number generator since the rand package doesn't work for some reason. Please make the solution better!!
-
-    game.value = ((clock.unix_timestamp / 4312) % 254 + 1) as i8;
+    let rand_pub_key: [u8; 32] = game.key().to_bytes();
+    
+    // // TODO: only needs 9 bits but 16 is for safety because idk...
+    let mut number: u32 = (clock.unix_timestamp % 254) as u32;
+    for n in rand_pub_key {
+      // Just throw as many uncontrollable variations in the mix as possible
+      number = ((game.timestamp % 254) as u32 + number + n as u32) % 254;
+    }
+    // // TODO: I created a very janky random number generator since the rand package doesn't work for some reason. Please make the solution better!!
+    game.value = (number % 254 + 1 - 128) as u8;
 
     Ok(())
   }
